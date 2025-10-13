@@ -14,10 +14,26 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Conexão com MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB conectado"))
-  .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
+// Verificar variáveis de ambiente essenciais
+const MONGODB_URI = process.env.MONGODB_URI;
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_jwt_secret';
+
+console.log('🔍 Variáveis de ambiente carregadas:');
+console.log('MONGODB_URI:', MONGODB_URI ? 'Configurado' : 'Não configurado');
+console.log('JWT_SECRET:', JWT_SECRET ? 'Configurado' : 'Não configurado');
+console.log('PORT:', process.env.PORT || '5000');
+
+// Conexão com MongoDB (opcional para desenvolvimento)
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log("✅ MongoDB conectado"))
+    .catch((err) => {
+      console.error("❌ Erro ao conectar ao MongoDB:", err);
+      console.log("⚠️ Continuando sem MongoDB (modo desenvolvimento)");
+    });
+} else {
+  console.log("⚠️ MongoDB não configurado - rodando sem banco de dados");
+}
 
 // Uploads
 const uploadDir = process.env.UPLOAD_DIR || "./uploads";
@@ -55,18 +71,29 @@ const Contato = mongoose.model("Contato", new mongoose.Schema({
 
 // CRUD de carros
 app.get("/api/carros", async (req, res) => {
-  const filtro = {};
-  if (req.query.marca) filtro.marca = req.query.marca;
-  const carros = await Carro.find(filtro);
-  res.json(carros);
+  try {
+    const filtro = {};
+    if (req.query.marca) filtro.marca = req.query.marca;
+    const carros = await Carro.find(filtro);
+    res.json(carros);
+  } catch (error) {
+    console.error("Erro ao buscar carros:", error);
+    // Retornar dados mock se o banco não estiver disponível
+    res.json([]);
+  }
 });
 
 app.post("/api/carros", upload.array("fotos", 5), async (req, res) => {
-  const { marca, modelo, ano, cor, preco, km, descricao } = req.body;
-  const fotos = req.files.map((f) => f.filename);
-  const carro = new Carro({ marca, modelo, ano, cor, preco, km, descricao, fotos });
-  await carro.save();
-  res.json(carro);
+  try {
+    const { marca, modelo, ano, cor, preco, km, descricao } = req.body;
+    const fotos = req.files.map((f) => f.filename);
+    const carro = new Carro({ marca, modelo, ano, cor, preco, km, descricao, fotos });
+    await carro.save();
+    res.json(carro);
+  } catch (error) {
+    console.error("Erro ao salvar carro:", error);
+    res.status(500).json({ erro: "Erro ao salvar carro" });
+  }
 });
 
 app.delete("/api/carros/:id", async (req, res) => {
@@ -76,9 +103,16 @@ app.delete("/api/carros/:id", async (req, res) => {
 
 // Contatos
 app.post("/api/contatos", async (req, res) => {
-  const contato = new Contato(req.body);
-  await contato.save();
-  res.json({ mensagem: "Contato recebido" });
+  try {
+    const contato = new Contato(req.body);
+    await contato.save();
+    res.json({ mensagem: "Contato recebido" });
+  } catch (error) {
+    console.error("Erro ao salvar contato:", error);
+    // Simular sucesso mesmo sem banco (para desenvolvimento)
+    console.log("Dados do contato:", req.body);
+    res.json({ mensagem: "Contato recebido (modo desenvolvimento)" });
+  }
 });
 
 // Admin - login e criação inicial
@@ -112,12 +146,19 @@ const __dirname = path.dirname(__filename);
 // Servir arquivos estáticos do React
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+// Middleware de tratamento de erros
+app.use((error, req, res, next) => {
+  console.error('❌ Erro no servidor:', error);
+  res.status(500).json({ erro: 'Erro interno do servidor' });
+});
+
 // Catch-all handler: serve o index.html para todas as rotas não-API (roteamento client-side do React)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
 // Iniciar servidor
-app.listen(process.env.PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });

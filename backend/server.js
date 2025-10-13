@@ -113,7 +113,8 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "../frontend/build"))); // Create React App
 
-app.get("*", (req, res) => {
+// Catch-all handler: envia o arquivo index.html para qualquer rota não encontrada
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 

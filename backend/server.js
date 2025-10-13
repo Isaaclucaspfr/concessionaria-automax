@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
@@ -7,6 +6,7 @@ import multer from "multer";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import fs from "fs";
+import { carrosMock } from "./data/carros-mock.js";
 
 dotenv.config();
 
@@ -15,25 +15,12 @@ app.use(express.json());
 app.use(cors());
 
 // Verificar variáveis de ambiente essenciais
-const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_jwt_secret';
 
-console.log('🔍 Variáveis de ambiente carregadas:');
-console.log('MONGODB_URI:', MONGODB_URI ? 'Configurado' : 'Não configurado');
+console.log('🔍 Aplicação iniciada com dados mockados');
 console.log('JWT_SECRET:', JWT_SECRET ? 'Configurado' : 'Não configurado');
 console.log('PORT:', process.env.PORT || '5000');
-
-// Conexão com MongoDB (opcional para desenvolvimento)
-if (MONGODB_URI) {
-  mongoose.connect(MONGODB_URI)
-    .then(() => console.log("✅ MongoDB conectado"))
-    .catch((err) => {
-      console.error("❌ Erro ao conectar ao MongoDB:", err);
-      console.log("⚠️ Continuando sem MongoDB (modo desenvolvimento)");
-    });
-} else {
-  console.log("⚠️ MongoDB não configurado - rodando sem banco de dados");
-}
+console.log(`📊 ${carrosMock.length} carros carregados para demonstração`);
 
 // Uploads
 const uploadDir = process.env.UPLOAD_DIR || "./uploads";
@@ -45,178 +32,152 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Modelos
-const Carro = mongoose.model("Carro", new mongoose.Schema({
-  marca: String,
-  modelo: String,
-  ano: Number,
-  cor: String,
-  preco: Number,
-  km: Number,
-  descricao: String,
-  fotos: [String],
-}));
+// Simulação de dados de admin e contatos em memória
+const adminData = {
+  email: "admin@concessionaria.com",
+  senha: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" // hash de "admin123"
+};
 
-const Admin = mongoose.model("Admin", new mongoose.Schema({
-  email: String,
-  senha: String,
-}));
-
-const Contato = mongoose.model("Contato", new mongoose.Schema({
-  nome: String,
-  telefone: String,
-  email: String,
-  mensagem: String,
-}));
+let contatosRecebidos = [];
 
 // CRUD de carros
-app.get("/api/carros", async (req, res) => {
+app.get("/api/carros", (req, res) => {
   try {
-    const filtro = {};
-    if (req.query.marca) filtro.marca = req.query.marca;
-    const carros = await Carro.find(filtro);
-    res.json(carros);
+    let carrosFiltrados = [...carrosMock];
+    
+    // Aplicar filtros se existirem
+    if (req.query.marca) {
+      carrosFiltrados = carrosFiltrados.filter(carro => 
+        carro.marca.toLowerCase().includes(req.query.marca.toLowerCase())
+      );
+    }
+    
+    if (req.query.categoria) {
+      carrosFiltrados = carrosFiltrados.filter(carro => 
+        carro.categoria === req.query.categoria
+      );
+    }
+    
+    res.json(carrosFiltrados);
   } catch (error) {
     console.error("Erro ao buscar carros:", error);
-    // Retornar dados mock se o banco não estiver disponível
-    res.json([]);
+    res.status(500).json({ erro: "Erro ao buscar carros" });
   }
 });
 
-app.post("/api/carros", upload.array("fotos", 5), async (req, res) => {
+app.post("/api/carros", upload.array("fotos", 5), (req, res) => {
   try {
     const { marca, modelo, ano, cor, preco, km, descricao } = req.body;
-    const fotos = req.files.map((f) => f.filename);
-    const carro = new Carro({ marca, modelo, ano, cor, preco, km, descricao, fotos });
-    await carro.save();
-    res.json(carro);
+    const fotos = req.files ? req.files.map((f) => f.filename) : [];
+    
+    const novoCarro = {
+      id: carrosMock.length + 1,
+      marca,
+      modelo,
+      ano: parseInt(ano),
+      cor,
+      preco: parseFloat(preco),
+      quilometragem: parseInt(km),
+      descricao,
+      fotos,
+      combustivel: "Flex",
+      cambio: "Manual",
+      disponivel: true,
+      categoria: "outros"
+    };
+    
+    carrosMock.push(novoCarro);
+    res.json(novoCarro);
   } catch (error) {
     console.error("Erro ao salvar carro:", error);
     res.status(500).json({ erro: "Erro ao salvar carro" });
   }
 });
 
-app.delete("/api/carros/:id", async (req, res) => {
-  await Carro.findByIdAndDelete(req.params.id);
-  res.json({ mensagem: "Carro deletado" });
-});
-
-// Contatos
-app.post("/api/contatos", async (req, res) => {
+app.delete("/api/carros/:id", (req, res) => {
   try {
-    const contato = new Contato(req.body);
-    await contato.save();
-    res.json({ mensagem: "Contato recebido" });
+    const id = parseInt(req.params.id);
+    const index = carrosMock.findIndex(carro => carro.id === id);
+    
+    if (index !== -1) {
+      carrosMock.splice(index, 1);
+      res.json({ mensagem: "Carro deletado" });
+    } else {
+      res.status(404).json({ erro: "Carro não encontrado" });
+    }
   } catch (error) {
-    console.error("Erro ao salvar contato:", error);
-    // Simular sucesso mesmo sem banco (para desenvolvimento)
-    console.log("Dados do contato:", req.body);
-    res.json({ mensagem: "Contato recebido (modo desenvolvimento)" });
+    console.error("Erro ao deletar carro:", error);
+    res.status(500).json({ erro: "Erro ao deletar carro" });
   }
 });
 
-// Rota para popular dados iniciais
-app.post("/api/popular-dados", async (req, res) => {
+// Contatos
+app.post("/api/contatos", (req, res) => {
   try {
-    // Verificar se já existem carros
-    const carrosExistentes = await Carro.countDocuments();
-    if (carrosExistentes > 0) {
-      return res.json({ mensagem: "Dados já existem no banco" });
-    }
+    const contato = {
+      id: contatosRecebidos.length + 1,
+      ...req.body,
+      dataEnvio: new Date().toISOString()
+    };
+    
+    contatosRecebidos.push(contato);
+    console.log("✉️ Novo contato recebido:", contato);
+    
+    res.json({ mensagem: "Contato recebido com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao salvar contato:", error);
+    res.status(500).json({ erro: "Erro ao processar contato" });
+  }
+});
 
-    // Dados dos carros de exemplo
-    const carrosIniciais = [
-      {
-        marca: "Honda",
-        modelo: "Civic",
-        ano: 2022,
-        cor: "Prata",
-        preco: 89900,
-        km: 15000,
-        descricao: "Honda Civic 2022 em excelente estado, único dono, revisões em dia na concessionária."
-      },
-      {
-        marca: "Toyota",
-        modelo: "Corolla",
-        ano: 2023,
-        cor: "Branco",
-        preco: 95500,
-        km: 8000,
-        descricao: "Toyota Corolla XEI 2023, seminovo, com todas as revisões em dia. Carro em perfeito estado."
-      },
-      {
-        marca: "Volkswagen",
-        modelo: "Jetta",
-        ano: 2021,
-        cor: "Preto",
-        preco: 78900,
-        km: 22000,
-        descricao: "VW Jetta 2021, completo com couro, multimídia e câmera de ré. Impecável!"
-      },
-      {
-        marca: "Hyundai",
-        modelo: "HB20",
-        ano: 2023,
-        cor: "Vermelho",
-        preco: 62900,
-        km: 5000,
-        descricao: "Hyundai HB20 Evolution 2023, praticamente zero km. Ideal para quem busca economia."
-      },
-      {
-        marca: "Chevrolet",
-        modelo: "Onix",
-        ano: 2022,
-        cor: "Azul",
-        preco: 58900,
-        km: 12000,
-        descricao: "Chevrolet Onix Plus LT 2022, automático, ar condicionado, direção elétrica."
-      },
-      {
-        marca: "Ford",
-        modelo: "Ka",
-        ano: 2021,
-        cor: "Branco",
-        preco: 45900,
-        km: 28000,
-        descricao: "Ford Ka SEL 2021, completo, único dono, ótima opção para cidade."
-      }
-    ];
-
-    // Inserir carros no banco
-    await Carro.insertMany(carrosIniciais);
-
+// Rota para popular dados iniciais (agora apenas confirma que dados já estão carregados)
+app.post("/api/popular-dados", (req, res) => {
+  try {
     res.json({ 
-      mensagem: "Dados iniciais criados com sucesso!",
-      carrosAdicionados: carrosIniciais.length 
+      mensagem: "Dados já carregados! A concessionária possui carros em estoque.",
+      carrosDisponíveis: carrosMock.filter(c => c.disponivel).length,
+      totalCarros: carrosMock.length
     });
   } catch (error) {
     console.error("Erro ao popular dados:", error);
-    res.status(500).json({ erro: "Erro ao popular dados iniciais" });
+    res.status(500).json({ erro: "Erro ao verificar dados" });
   }
 });
 
 // Admin - login e criação inicial
-app.post("/api/admin/init", async (req, res) => {
+app.post("/api/admin/init", (req, res) => {
   try {
-    const existe = await Admin.findOne({ email: "admin@concessionaria.com" });
-    if (existe) return res.json({ mensagem: "Admin já existe" });
-    const senhaHash = await bcrypt.hash("admin123", 10);
-    await Admin.create({ email: "admin@concessionaria.com", senha: senhaHash });
-    res.json({ mensagem: "Admin criado", email: "admin@concessionaria.com", senha: "admin123" });
+    res.json({ 
+      mensagem: "Admin já configurado",
+      email: adminData.email,
+      senha: "admin123",
+      instrucoes: "Use estas credenciais para fazer login"
+    });
   } catch (error) {
-    console.error("Erro ao criar admin:", error);
-    res.status(500).json({ erro: "Erro ao criar admin" });
+    console.error("Erro ao inicializar admin:", error);
+    res.status(500).json({ erro: "Erro ao inicializar admin" });
   }
 });
 
 app.post("/api/admin/login", async (req, res) => {
-  const { email, senha } = req.body;
-  const admin = await Admin.findOne({ email });
-  if (!admin) return res.status(401).json({ erro: "Admin não encontrado" });
-  const ok = await bcrypt.compare(senha, admin.senha);
-  if (!ok) return res.status(401).json({ erro: "Senha incorreta" });
-  const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-  res.json({ token });
+  try {
+    const { email, senha } = req.body;
+    
+    if (email !== adminData.email) {
+      return res.status(401).json({ erro: "Admin não encontrado" });
+    }
+    
+    const ok = await bcrypt.compare(senha, adminData.senha);
+    if (!ok) {
+      return res.status(401).json({ erro: "Senha incorreta" });
+    }
+    
+    const token = jwt.sign({ email: adminData.email }, JWT_SECRET);
+    res.json({ token });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    res.status(500).json({ erro: "Erro no login" });
+  }
 });
 
 // Servir uploads

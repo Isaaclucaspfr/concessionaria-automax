@@ -115,13 +115,98 @@ app.post("/api/contatos", async (req, res) => {
   }
 });
 
+// Rota para popular dados iniciais
+app.post("/api/popular-dados", async (req, res) => {
+  try {
+    // Verificar se já existem carros
+    const carrosExistentes = await Carro.countDocuments();
+    if (carrosExistentes > 0) {
+      return res.json({ mensagem: "Dados já existem no banco" });
+    }
+
+    // Dados dos carros de exemplo
+    const carrosIniciais = [
+      {
+        marca: "Honda",
+        modelo: "Civic",
+        ano: 2022,
+        cor: "Prata",
+        preco: 89900,
+        km: 15000,
+        descricao: "Honda Civic 2022 em excelente estado, único dono, revisões em dia na concessionária."
+      },
+      {
+        marca: "Toyota",
+        modelo: "Corolla",
+        ano: 2023,
+        cor: "Branco",
+        preco: 95500,
+        km: 8000,
+        descricao: "Toyota Corolla XEI 2023, seminovo, com todas as revisões em dia. Carro em perfeito estado."
+      },
+      {
+        marca: "Volkswagen",
+        modelo: "Jetta",
+        ano: 2021,
+        cor: "Preto",
+        preco: 78900,
+        km: 22000,
+        descricao: "VW Jetta 2021, completo com couro, multimídia e câmera de ré. Impecável!"
+      },
+      {
+        marca: "Hyundai",
+        modelo: "HB20",
+        ano: 2023,
+        cor: "Vermelho",
+        preco: 62900,
+        km: 5000,
+        descricao: "Hyundai HB20 Evolution 2023, praticamente zero km. Ideal para quem busca economia."
+      },
+      {
+        marca: "Chevrolet",
+        modelo: "Onix",
+        ano: 2022,
+        cor: "Azul",
+        preco: 58900,
+        km: 12000,
+        descricao: "Chevrolet Onix Plus LT 2022, automático, ar condicionado, direção elétrica."
+      },
+      {
+        marca: "Ford",
+        modelo: "Ka",
+        ano: 2021,
+        cor: "Branco",
+        preco: 45900,
+        km: 28000,
+        descricao: "Ford Ka SEL 2021, completo, único dono, ótima opção para cidade."
+      }
+    ];
+
+    // Inserir carros no banco
+    await Carro.insertMany(carrosIniciais);
+
+    res.json({ 
+      mensagem: "Dados iniciais criados com sucesso!",
+      carrosAdicionados: carrosIniciais.length 
+    });
+  } catch (error) {
+    console.error("Erro ao popular dados:", error);
+    res.status(500).json({ erro: "Erro ao popular dados iniciais" });
+  }
+});
+
 // Admin - login e criação inicial
 app.post("/api/admin/init", async (req, res) => {
-  const existe = await Admin.findOne({ email: "admin@concessionaria.com" });
-  if (existe) return res.json({ mensagem: "Admin já existe" });
-  const senhaHash = await bcrypt.hash("admin123", 10);
-  await Admin.create({ email: "admin@concessionaria.com", senha: senhaHash });
-  res.json({ mensagem: "Admin criado", email: "admin@concessionaria.com", senha: "admin123" });
+  try {
+    const existe = await Admin.findOne({ email: "admin@concessionaria.com" });
+    if (existe) return res.json({ mensagem: "Admin já existe" });
+    const senhaHash = await bcrypt.hash("admin123", 10);
+    await Admin.create({ email: "admin@concessionaria.com", senha: senhaHash });
+    res.json({ mensagem: "Admin criado", email: "admin@concessionaria.com", senha: "admin123" });
+  } catch (error) {
+    console.error("Erro ao criar admin:", error);
+    res.status(500).json({ erro: "Erro ao criar admin" });
+  }
 });
 
 app.post("/api/admin/login", async (req, res) => {

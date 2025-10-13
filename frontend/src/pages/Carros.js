@@ -42,15 +42,15 @@ const Carros = () => {
     <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
         {/* Header da Página */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Nosso Catálogo</h1>
-          <p className="text-xl text-gray-600">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Nosso Catálogo</h1>
+          <p className="text-lg text-gray-600">
             Encontre o carro perfeito para você
           </p>
         </div>
 
         {/* Filtros */}
-        <div className="mb-8 flex flex-wrap gap-4 justify-center">
+        <div className="mb-6 flex flex-wrap gap-4 justify-center">
           <select 
             value={filtroMarca} 
             onChange={(e) => setFiltroMarca(e.target.value)}
@@ -82,7 +82,7 @@ const Carros = () => {
 
         {/* Grade de Carros */}
         {!loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {carros.length > 0 ? carros.map((carro, index) => (
               <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 {/* Imagem do Carro */}

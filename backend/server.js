@@ -111,11 +111,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "../frontend/dist"))); // se for Vite
-// ou "../frontend/build" se for Create React App
+app.use(express.static(path.join(__dirname, "../frontend/build"))); // Create React App
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
 // Iniciar servidor

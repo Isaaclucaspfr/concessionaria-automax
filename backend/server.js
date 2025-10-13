@@ -53,9 +53,6 @@ const Contato = mongoose.model("Contato", new mongoose.Schema({
   mensagem: String,
 }));
 
-// Rota principal
-app.get("/", (req, res) => res.send("API da Concessionária está online!"));
-
 // CRUD de carros
 app.get("/api/carros", async (req, res) => {
   const filtro = {};
@@ -106,14 +103,16 @@ app.post("/api/admin/login", async (req, res) => {
 // Servir uploads
 app.use("/uploads", express.static(path.resolve(uploadDir)));
 
+// Configuração para servir o frontend React (deve ser APÓS todas as rotas da API)
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "../frontend/build"))); // Create React App
+// Servir arquivos estáticos do React
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-// Catch-all handler: envia o arquivo index.html para qualquer rota não encontrada
+// Catch-all handler: serve o index.html para todas as rotas não-API (roteamento client-side do React)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });

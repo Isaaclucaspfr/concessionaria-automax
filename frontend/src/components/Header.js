@@ -7,50 +7,55 @@ const Header = () => {
   const isActive = (path) => location.pathname === path;
   
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4">
+    <header className="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-gradient">
+      <div className="container">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-blue-600 text-white p-2 rounded-lg">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"></path>
+          <Link to="/" className="flex items-center space-x-2 group">
+            <div className="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-2 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">AutoMax</h1>
-              <p className="text-xs text-gray-500">Concessionária</p>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">SZX CARS</h1>
+              <p className="text-xs text-gray-500 font-semibold">Concessionária Premium</p>
             </div>
           </Link>
 
           {/* Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="flex items-center space-x-6">
             <Link 
               to="/" 
-              className={`transition-colors ${isActive('/') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
+              className={`hidden md:block transition-colors ${isActive('/') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
             >
               Início
             </Link>
             <Link 
               to="/carros" 
-              className={`transition-colors ${isActive('/carros') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
+              className={`hidden md:block transition-colors ${isActive('/carros') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
             >
               Catálogo
             </Link>
             <Link 
               to="/contato" 
-              className={`transition-colors ${isActive('/contato') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
+              className={`hidden md:block transition-colors ${isActive('/contato') ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'}`}
             >
               Contato
             </Link>
+            <Link 
+              to="/login" 
+              className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all"
+              title="Área Administrativa"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span className="font-semibold">Login</span>
+            </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button className="md:hidden text-gray-600">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+
         </div>
       </div>
     </header>

@@ -34,8 +34,9 @@ const upload = multer({ storage });
 
 // Simulação de dados de admin e contatos em memória
 const adminData = {
-  email: "admin@concessionaria.com",
-  senha: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" // hash de "admin123"
+  username: "Isaaclucaspfr",
+  password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // hash de "teste123"
+  email: "admin@concessionaria.com"
 };
 
 let contatosRecebidos = [];
@@ -67,8 +68,8 @@ app.get("/api/carros", (req, res) => {
 
 app.post("/api/carros", upload.array("fotos", 5), (req, res) => {
   try {
-    const { marca, modelo, ano, cor, preco, km, descricao } = req.body;
-    const fotos = req.files ? req.files.map((f) => f.filename) : [];
+    const { marca, modelo, ano, cor, preco, km, descricao, cambio, combustivel, portas, opcionais } = req.body;
+    const fotos = req.files ? req.files.map((f) => f.filename) : (req.body.fotos || []);
     
     const novoCarro = {
       id: carrosMock.length + 1,
@@ -77,11 +78,13 @@ app.post("/api/carros", upload.array("fotos", 5), (req, res) => {
       ano: parseInt(ano),
       cor,
       preco: parseFloat(preco),
-      quilometragem: parseInt(km),
-      descricao,
+      km: parseInt(km),
+      descricao: descricao || '',
       fotos,
-      combustivel: "Flex",
-      cambio: "Manual",
+      combustivel: combustivel || "Flex",
+      cambio: cambio || "Manual",
+      portas: parseInt(portas) || 4,
+      opcionais: opcionais || [],
       disponivel: true,
       categoria: "outros"
     };
@@ -91,6 +94,40 @@ app.post("/api/carros", upload.array("fotos", 5), (req, res) => {
   } catch (error) {
     console.error("Erro ao salvar carro:", error);
     res.status(500).json({ erro: "Erro ao salvar carro" });
+  }
+});
+
+app.put("/api/carros/:id", (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const index = carrosMock.findIndex(carro => carro.id === id);
+    
+    if (index !== -1) {
+      const { marca, modelo, ano, cor, preco, km, descricao, cambio, combustivel, portas, opcionais, fotos } = req.body;
+      
+      carrosMock[index] = {
+        ...carrosMock[index],
+        marca,
+        modelo,
+        ano: parseInt(ano),
+        cor,
+        preco: parseFloat(preco),
+        km: parseInt(km),
+        descricao: descricao || '',
+        cambio: cambio || "Manual",
+        combustivel: combustivel || "Flex",
+        portas: parseInt(portas) || 4,
+        opcionais: opcionais || [],
+        fotos: fotos || carrosMock[index].fotos
+      };
+      
+      res.json(carrosMock[index]);
+    } else {
+      res.status(404).json({ erro: "Carro não encontrado" });
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar carro:", error);
+    res.status(500).json({ erro: "Erro ao atualizar carro" });
   }
 });
 
@@ -108,6 +145,34 @@ app.delete("/api/carros/:id", (req, res) => {
   } catch (error) {
     console.error("Erro ao deletar carro:", error);
     res.status(500).json({ erro: "Erro ao deletar carro" });
+  }
+});
+
+// Login
+app.post("/api/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    
+    if (username !== adminData.username) {
+      return res.status(401).json({ message: "Usuário ou senha incorretos" });
+    }
+    
+    // Para simplificar, vamos aceitar a senha diretamente
+    if (password !== "teste123") {
+      return res.status(401).json({ message: "Usuário ou senha incorretos" });
+    }
+    
+    const token = jwt.sign({ username: adminData.username }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ 
+      token,
+      user: {
+        username: adminData.username,
+        email: adminData.email
+      }
+    });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    res.status(500).json({ message: "Erro no login" });
   }
 });
 

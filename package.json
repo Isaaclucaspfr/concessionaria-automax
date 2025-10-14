@@ -12,10 +12,21 @@
     "dev-frontend": "cd frontend && npm start",
     "dev-backend": "cd backend && npm run dev"
   },
-  "keywords": ["concessionaria", "react", "nodejs", "express", "mongodb"],
+  "keywords": [
+    "concessionaria",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
   "author": "",
   "license": "ISC",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-scripts": "^5.0.1"
   }
 }

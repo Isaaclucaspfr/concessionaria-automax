@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CarImage from '../components/CarImage';
 
 const Carros = () => {
   const [carros, setCarros] = useState([]);
@@ -91,12 +90,12 @@ const Carros = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header da Página */}
       <section className="bg-white border-b">
-        <div className="container py-8">
+        <div className="container mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
               Nosso Catálogo
             </h1>
-            <p className="text-lg text-gray-600 px-4">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Explore nossa seleção premium de veículos. Qualidade, procedência e as melhores condições de pagamento.
             </p>
             <div className="flex justify-center items-center mt-6 text-sm text-gray-500">
@@ -110,13 +109,13 @@ const Carros = () => {
 
       {/* Filtros */}
       <section className="bg-white border-b">
-        <div className="container py-4">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex flex-wrap gap-4 items-center justify-between">
             <div className="flex flex-wrap gap-4">
               <select 
                 value={filtroMarca} 
                 onChange={(e) => setFiltroMarca(e.target.value)}
-                className="select"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 <option value="">Todas as Marcas</option>
                 {marcas.map(marca => (
@@ -127,7 +126,7 @@ const Carros = () => {
               <select 
                 value={filtroCategoria} 
                 onChange={(e) => setFiltroCategoria(e.target.value)}
-                className="select"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 <option value="">Todas as Categorias</option>
                 {categorias.map(categoria => (
@@ -140,7 +139,7 @@ const Carros = () => {
               <select 
                 value={filtroPreco} 
                 onChange={(e) => setFiltroPreco(e.target.value)}
-                className="select"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 <option value="">Todas as Faixas de Preço</option>
                 <option value="ate-50k">Até R$ 50.000</option>
@@ -153,7 +152,7 @@ const Carros = () => {
             {(filtroMarca || filtroCategoria || filtroPreco) && (
               <button 
                 onClick={limparFiltros}
-                className="btn bg-gray-500 text-white hover:bg-gray-600 px-4 py-2"
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
                 Limpar Filtros
               </button>
@@ -163,11 +162,11 @@ const Carros = () => {
       </section>
 
       {/* Conteúdo Principal */}
-      <div className="container py-6">
+      <div className="container mx-auto px-4 py-8">
         {/* Loading */}
         {loading && (
           <div className="flex justify-center items-center py-16">
-            <div className="loading-spinner"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
           </div>
         )}
 
@@ -182,31 +181,42 @@ const Carros = () => {
 
         {/* Grade de Carros */}
         {!loading && (
-          <div className="grid grid-3 desktop-grid-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {carrosFiltrados.length > 0 ? carrosFiltrados.map((carro, index) => (
-              <div key={index} className="card overflow-hidden">
+              <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 {/* Imagem do Carro */}
                 <div className="relative h-56 overflow-hidden">
-                  <CarImage
-                    src={carro.fotos && carro.fotos.length > 0 ? carro.fotos[0] : ''}
-                    alt={`${carro.marca} ${carro.modelo}`}
-                    className="w-full h-full object-cover"
-                  />
+                  {carro.fotos && carro.fotos.length > 0 ? (
+                    <img 
+                      src={carro.fotos[0]} 
+                      alt={`${carro.marca} ${carro.modelo}`}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div className="absolute inset-0 bg-gray-200 flex items-center justify-center" style={{display: carro.fotos && carro.fotos.length > 0 ? 'none' : 'flex'}}>
+                    <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd"></path>
+                    </svg>
+                  </div>
                   
                   {/* Badge do Ano */}
-                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
                     {carro.ano}
                   </div>
                   
                   {/* Badge de Categoria */}
-                  <div className="absolute top-4 left-4 bg-white text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
+                  <div className="absolute top-4 left-4 bg-white text-gray-700 px-3 py-1 rounded-full text-xs font-medium shadow-lg">
                     {carro.categoria?.toUpperCase()}
                   </div>
                 </div>
 
                 {/* Informações do Carro */}
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">
                     {carro.marca} {carro.modelo}
                   </h3>
                   
@@ -222,15 +232,15 @@ const Carros = () => {
                     </span>
                   </div>
                   
-                  <p className="text-gray-600 text-sm mb-4">
-                    {carro.descricao && carro.descricao.length > 80 ? `${carro.descricao.substring(0, 80)}...` : carro.descricao}
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {carro.descricao}
                   </p>
                   
                   <div className="flex items-center justify-between">
-                    <div className="text-xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-blue-600">
                       {formatPrice(carro.preco)}
                     </div>
-                    <button className="btn btn-primary text-sm px-4 py-2">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium">
                       Ver Detalhes
                     </button>
                   </div>
@@ -245,7 +255,7 @@ const Carros = () => {
                 <p className="text-gray-500 mb-4">Tente ajustar os filtros para encontrar o carro ideal</p>
                 <button 
                   onClick={limparFiltros}
-                  className="btn btn-primary px-6 py-2"
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Limpar Filtros
                 </button>
@@ -256,18 +266,18 @@ const Carros = () => {
       </div>
 
       {/* Call to Action */}
-      <section className="bg-blue-600 text-white py-8 mt-8">
-        <div className="container text-center">
+      <section className="bg-blue-600 text-white py-16 mt-16">
+        <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Não encontrou o que procurava?
           </h2>
-          <p className="text-lg text-blue-100 mb-6 px-4">
+          <p className="text-xl text-blue-100 mb-6">
             Nossa equipe pode ajudá-lo a encontrar o carro perfeito para suas necessidades
           </p>
-          <div className="flex flex-col gap-4 justify-center mobile-flex-col desktop-flex-row">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
               href="/contato"
-              className="btn bg-white text-blue-600 hover:bg-gray-100 px-6 py-3"
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors"
             >
               Entre em Contato
             </a>
@@ -275,7 +285,7 @@ const Carros = () => {
               href="https://wa.me/5511999999999" 
               target="_blank"
               rel="noopener noreferrer"
-              className="btn border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3"
+              className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-lg font-semibold transition-colors"
             >
               WhatsApp
             </a>

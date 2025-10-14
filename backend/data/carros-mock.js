@@ -12,8 +12,9 @@ export const carrosMock = [
     cor: "Prata",
     descricao: "Sedã executivo com excelente custo-benefício, ideal para uso urbano e viagens.",
     fotos: [
-      "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop"
+      "/images/cars/corolla.png",
+      "/images/cars/corolla.png",
+      "/images/cars/corolla.png"
     ],
     disponivel: true,
     categoria: "sedan"
@@ -30,8 +31,9 @@ export const carrosMock = [
     cor: "Preto",
     descricao: "Sedã esportivo com design moderno e performance excepcional.",
     fotos: [
-      "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop"
+      "/images/cars/civic.png",
+      "/images/cars/civic.png",
+      "/images/cars/civic.png"
     ],
     disponivel: true,
     categoria: "sedan"
@@ -48,8 +50,9 @@ export const carrosMock = [
     cor: "Branco",
     descricao: "SUV compacto perfeito para a família, com amplo espaço interno e tecnologia.",
     fotos: [
-      "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop"
+      "/images/cars/tcross.png",
+      "/images/cars/tcross.png",
+      "/images/cars/tcross.png"
     ],
     disponivel: true,
     categoria: "suv"
@@ -66,8 +69,9 @@ export const carrosMock = [
     cor: "Vermelho",
     descricao: "Hatch moderno e econômico, ideal para jovens e primeiros carros.",
     fotos: [
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1494976688153-d4c447cb7688?w=800&h=600&fit=crop"
+      "/images/cars/onix.png",
+      "/images/cars/onix.png",
+      "/images/cars/onix.png"
     ],
     disponivel: true,
     categoria: "hatch"
@@ -84,8 +88,9 @@ export const carrosMock = [
     cor: "Azul",
     descricao: "Compacto urbano com baixo consumo e fácil manutenção.",
     fotos: [
-      "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=800&h=600&fit=crop"
+      "/images/cars/ford-ka.png",
+      "/images/cars/ford-ka.png",
+      "/images/cars/ford-ka.png"
     ],
     disponivel: true,
     categoria: "hatch"
@@ -102,8 +107,9 @@ export const carrosMock = [
     cor: "Laranja",
     descricao: "SUV urbano com design arrojado e tecnologia de ponta.",
     fotos: [
-      "https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop"
+      "/images/cars/kicks.png",
+      "/images/cars/kicks.png",
+      "/images/cars/kicks.png"
     ],
     disponivel: true,
     categoria: "suv"
@@ -120,8 +126,9 @@ export const carrosMock = [
     cor: "Cinza",
     descricao: "Hatch versátil com bom espaço interno e excelente garantia.",
     fotos: [
-      "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop"
+      "/images/cars/hb20.png",
+      "/images/cars/hb20.png",
+      "/images/cars/hb20.png"
     ],
     disponivel: true,
     categoria: "hatch"
@@ -138,8 +145,9 @@ export const carrosMock = [
     cor: "Branco",
     descricao: "SUV robusto com capacidade off-road e luxo no acabamento.",
     fotos: [
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop"
+      "/images/cars/compass.png",
+      "/images/cars/compass.png",
+      "/images/cars/compass.png"
     ],
     disponivel: true,
     categoria: "suv"
@@ -156,8 +164,9 @@ export const carrosMock = [
     cor: "Verde",
     descricao: "Compacto econômico com design único e baixo custo de manutenção.",
     fotos: [
-      "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1494976688153-d4c447cb7688?w=800&h=600&fit=crop"
+      "/images/cars/kwid.png",
+      "/images/cars/kwid.png",
+      "/images/cars/kwid.png"
     ],
     disponivel: true,
     categoria: "hatch"
@@ -174,8 +183,9 @@ export const carrosMock = [
     cor: "Prata",
     descricao: "Picape média com design italiano e versatilidade para trabalho e lazer.",
     fotos: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?w=800&h=600&fit=crop"
+      "/images/cars/toro.png",
+      "/images/cars/toro.png",
+      "/images/cars/toro.png"
     ],
     disponivel: true,
     categoria: "picape"
@@ -192,8 +202,9 @@ export const carrosMock = [
     cor: "Preto",
     descricao: "Sedã premium com performance esportiva e luxo alemão.",
     fotos: [
-      "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop"
+      "/images/cars/320i.png",
+      "/images/cars/320i.png",
+      "/images/cars/320i.png"
     ],
     disponivel: true,
     categoria: "sedan"
@@ -210,8 +221,9 @@ export const carrosMock = [
     cor: "Branco",
     descricao: "Hatch premium com tecnologia avançada e design sofisticado.",
     fotos: [
-      "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&h=600&fit=crop"
+      "/images/cars/audi-a3.png",
+      "/images/cars/audi-a3.png",
+      "/images/cars/audi-a3.png"
     ],
     disponivel: true,
     categoria: "hatch"

@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600"></div>
-      <div className="container py-12 relative z-10">
+      <div className="container py-12 relative z-10 footer-content">
         <div className="grid grid-3 desktop-grid-3 gap-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-3 mb-4">

@@ -1,69 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CarImage from '../components/CarImage';
-import { animateCounters } from '../animations';
 
 const Homepage = () => {
   const [carrosDestaque, setCarrosDestaque] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log('🏠 HOMEPAGE RENDERIZANDO');
-  console.log('📊 Estado atual:', { 
-    carrosCount: carrosDestaque.length, 
-    loading,
-    timestamp: new Date().toLocaleTimeString()
-  });
-
   useEffect(() => {
-    console.log('🔄 Homepage useEffect INICIANDO...');
-    console.log('🌐 Fazendo fetch para /api/carros');
-    
     fetch('/api/carros')
-      .then(response => {
-        console.log('📡 Resposta recebida:', response.status, response.ok);
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log('📊 Dados recebidos da API:', data?.length || 0, 'carros');
         setCarrosDestaque(data.slice(0, 6)); // 6 carros em destaque
         setLoading(false);
-        console.log('✅ Estado atualizado - loading: false, carros:', data?.length || 0);
-        
-        // Iniciar animação dos contadores após carregar os dados
-        setTimeout(() => {
-          console.log('🔢 Iniciando contadores da Homepage...');
-          animateCounters();
-        }, 500);
       })
       .catch(error => {
-        console.error('❌ ERRO ao buscar carros:', error);
-        console.log('🔄 Usando dados de fallback...');
-        
-        // Dados de fallback simples
-        const fallbackData = [
-          {
-            id: 1,
-            marca: 'Toyota',
-            modelo: 'Corolla',
-            ano: 2022,
-            preco: 85000,
-            combustivel: 'Flex',
-            cambio: 'Automático',
-            quilometragem: 25000,
-            descricao: 'Sedan premium com tecnologia avançada.',
-            fotos: ['']
-          }
-        ];
-        
-        setCarrosDestaque(fallbackData);
+        console.error('Erro ao buscar carros:', error);
         setLoading(false);
-        console.log('✅ Fallback aplicado - loading: false, carros: 1');
-        
-        // Iniciar animação dos contadores após fallback
-        setTimeout(() => {
-          console.log('🔢 Iniciando contadores da Homepage (fallback)...');
-          animateCounters();
-        }, 500);
       });
   }, []);
 
@@ -74,12 +26,8 @@ const Homepage = () => {
     }).format(price);
   };
 
-  console.log('🖼️ HOMEPAGE PREPARANDO RENDER');
-  console.log('📋 Dados para render:', { carrosDestaque, loading, carrosLength: carrosDestaque.length });
-
   return (
     <div className="min-h-screen">
-      {console.log('🎨 JSX SENDO RENDERIZADO - Homepage visível')}
       {/* Hero Section */}
       <section className="hero py-16">
         <div className="hero-content">
@@ -112,7 +60,7 @@ const Homepage = () => {
       </section>
 
       {/* Estatísticas */}
-      <section className="py-8 bg-white">
+      <section className="py-8 bg-white reveal">
         <div className="container">
           <div className="grid grid-4 desktop-grid-4 text-center">
             <div className="p-4">
@@ -136,7 +84,7 @@ const Homepage = () => {
       </section>
 
       {/* Nossos Diferenciais */}
-      <section className="py-8 bg-gray-50">
+      <section className="py-8 bg-gray-50 reveal">
         <div className="container">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 gradient-text">
@@ -191,9 +139,7 @@ const Homepage = () => {
       </section>
 
       {/* Carros em Destaque */}
-      <section className="py-8 bg-white">
-        {console.log('🚗 SEÇÃO CARROS EM DESTAQUE - loading:', loading, 'carros:', carrosDestaque.length)}
-        
+      <section className="py-8 bg-white reveal">
         <div className="container">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 gradient-text">
@@ -204,27 +150,14 @@ const Homepage = () => {
             </p>
           </div>
           
-          {/* TESTE VISUAL REMOVIDO - Debug concluído */}
-          
           {loading ? (
             <div className="flex justify-center items-center py-12">
-              {console.log('⏳ MOSTRANDO LOADING SPINNER')}
               <div className="loading-spinner"></div>
             </div>
           ) : (
-            <div 
-              className="grid grid-3 desktop-grid-3 gap-4"
-            >
-              {console.log('🎯 RENDERIZANDO GRID DE CARROS - Quantidade:', carrosDestaque.length)}
-              {console.log('🔍 Dados dos carros:', carrosDestaque)}
-              {carrosDestaque.map((carro, index) => {
-                console.log(`🚙 Renderizando carro ${index}:`, carro.marca, carro.modelo);
-                return (
-                <div 
-                  key={index} 
-                  className="card overflow-hidden"
-                >
-                  {/* Imagem do carro */}
+            <div className="grid grid-3 desktop-grid-3 gap-4">
+              {carrosDestaque.map((carro, index) => (
+                <div key={index} className="card overflow-hidden">
                   <div className="relative h-48 overflow-hidden">
                     <CarImage
                       src={carro.fotos && carro.fotos.length > 0 ? carro.fotos[0] : ''}
@@ -258,8 +191,7 @@ const Homepage = () => {
                     </div>
                   </div>
                 </div>
-                );
-              })}
+              ))}
             </div>
           )}
           
@@ -275,7 +207,7 @@ const Homepage = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-8 bg-gradient-to-r from-blue-600 to-blue-800 text-white call-to-action">
+      <section className="py-8 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="container text-center">
           <h2 className="text-3xl font-bold mb-4">
             Pronto para Encontrar Seu Próximo Carro?

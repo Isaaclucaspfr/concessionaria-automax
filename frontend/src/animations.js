@@ -15,10 +15,13 @@ export const initParallax = () => {
 
 // Animação de contadores (números incrementando)
 export const animateCounters = () => {
+  console.log('🔢 Iniciando animação de contadores...');
   const counters = document.querySelectorAll('[data-count]');
+  console.log('📊 Contadores encontrados:', counters.length);
   
   const animateCounter = (counter) => {
     const target = parseInt(counter.dataset.count);
+    console.log(`🎯 Animando contador para: ${target}`);
     const duration = 2000; // 2 segundos
     const increment = target / (duration / 16); // 60 FPS
     let current = 0;
@@ -30,6 +33,7 @@ export const animateCounters = () => {
         requestAnimationFrame(updateCounter);
       } else {
         counter.textContent = target;
+        console.log(`✅ Contador finalizado em: ${target}`);
       }
     };
     
@@ -39,14 +43,19 @@ export const animateCounters = () => {
   // Intersection Observer para animar quando visível
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
+      console.log('👁️ Contador observado:', entry.target.dataset.count, 'visível:', entry.isIntersecting);
       if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+        console.log('🚀 Iniciando animação do contador:', entry.target.dataset.count);
         animateCounter(entry.target);
         entry.target.classList.add('animated');
       }
     });
   }, { threshold: 0.5 });
   
-  counters.forEach(counter => observer.observe(counter));
+  counters.forEach(counter => {
+    console.log('👀 Observando contador:', counter.dataset.count);
+    observer.observe(counter);
+  });
 };
 
 // Efeito de reveal ao scroll (aparecer suavemente)

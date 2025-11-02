@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Carros = () => {
   const [carros, setCarros] = useState([]);
@@ -13,46 +13,13 @@ const Carros = () => {
   const [modalAberto, setModalAberto] = useState(false);
   const [fotoAtiva, setFotoAtiva] = useState(0);
 
-  const aplicarFiltros = useCallback(() => {
-    let resultado = [...carros];
-
-    if (filtroMarca) {
-      resultado = resultado.filter(carro => carro.marca === filtroMarca);
-    }
-
-    if (filtroCategoria) {
-      resultado = resultado.filter(carro => carro.categoria === filtroCategoria);
-    }
-
-    if (filtroPreco) {
-      switch (filtroPreco) {
-        case 'ate-50k':
-          resultado = resultado.filter(carro => carro.preco <= 50000);
-          break;
-        case '50k-100k':
-          resultado = resultado.filter(carro => carro.preco > 50000 && carro.preco <= 100000);
-          break;
-        case '100k-200k':
-          resultado = resultado.filter(carro => carro.preco > 100000 && carro.preco <= 200000);
-          break;
-        case 'acima-200k':
-          resultado = resultado.filter(carro => carro.preco > 200000);
-          break;
-        default:
-          break;
-      }
-    }
-
-    setCarrosFiltrados(resultado);
-  }, [carros, filtroMarca, filtroCategoria, filtroPreco]);
-
   useEffect(() => {
     carregarCarros();
   }, []);
 
   useEffect(() => {
     aplicarFiltros();
-  }, [aplicarFiltros]);
+  }, [carros, filtroMarca, filtroCategoria, filtroPreco]);
 
   // Cleanup do modal ao desmontar componente
   useEffect(() => {
@@ -83,6 +50,39 @@ const Carros = () => {
       });
   };
 
+  const aplicarFiltros = () => {
+    let resultado = [...carros];
+
+    if (filtroMarca) {
+      resultado = resultado.filter(carro => carro.marca === filtroMarca);
+    }
+
+    if (filtroCategoria) {
+      resultado = resultado.filter(carro => carro.categoria === filtroCategoria);
+    }
+
+    if (filtroPreco) {
+      switch (filtroPreco) {
+        case 'ate-50k':
+          resultado = resultado.filter(carro => carro.preco <= 50000);
+          break;
+        case '50k-100k':
+          resultado = resultado.filter(carro => carro.preco > 50000 && carro.preco <= 100000);
+          break;
+        case '100k-200k':
+          resultado = resultado.filter(carro => carro.preco > 100000 && carro.preco <= 200000);
+          break;
+        case 'acima-200k':
+          resultado = resultado.filter(carro => carro.preco > 200000);
+          break;
+        default:
+          break;
+      }
+    }
+
+    setCarrosFiltrados(resultado);
+  };
+
   const limparFiltros = () => {
     setFiltroMarca('');
     setFiltroCategoria('');
@@ -97,9 +97,11 @@ const Carros = () => {
   };
 
   const handleVerDetalhes = (carro) => {
+    console.log('Clicou em Ver Detalhes:', carro);
     setCarroSelecionado(carro);
     setFotoAtiva(0); // Reset para a primeira foto
     setModalAberto(true);
+    console.log('Modal deve abrir agora');
     document.body.style.overflow = 'hidden'; // Prevenir scroll do body
   };
 
@@ -149,7 +151,7 @@ const Carros = () => {
               <select 
                 value={filtroMarca} 
                 onChange={(e) => setFiltroMarca(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Todas as Marcas</option>
                 {marcas.map(marca => (
@@ -160,20 +162,18 @@ const Carros = () => {
               <select 
                 value={filtroCategoria} 
                 onChange={(e) => setFiltroCategoria(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Todas as Categorias</option>
                 {categorias.map(categoria => (
-                  <option key={categoria} value={categoria}>
-                    {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                  </option>
+                  <option key={categoria} value={categoria}>{categoria.charAt(0).toUpperCase() + categoria.slice(1)}</option>
                 ))}
               </select>
 
               <select 
                 value={filtroPreco} 
                 onChange={(e) => setFiltroPreco(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Todas as Faixas de Preço</option>
                 <option value="ate-50k">Até R$ 50.000</option>
@@ -508,8 +508,7 @@ const Carros = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

@@ -11,7 +11,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  color: #1f2937;
+  color: #000000;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
   min-height: 100vh;
@@ -125,15 +125,34 @@ body {
 .text-left { text-align: left; }
 
 /* Colors */
+.text-black { color: #000000 !important; }
 .text-gray-600 { color: #6b7280; }
 .text-gray-700 { color: #374151; }
 .text-gray-800 { color: #1f2937; }
 .text-gray-900 { color: #111827; }
-.text-white { color: #ffffff; }
 .text-blue-600 { color: #2563eb; }
 .text-blue-800 { color: #1e40af; }
 .text-green-600 { color: #16a34a; }
 .text-purple-600 { color: #9333ea; }
+
+/* Text colors for colored backgrounds */
+.text-white { color: #ffffff !important; }
+
+/* Specific black text for header logo and footer */
+.header-logo h1,
+.header-logo p,
+.footer-content h3,
+.footer-content p,
+.footer-content div,
+.call-to-action h2,
+.call-to-action p {
+  color: #000000 !important;
+}
+
+/* Keep WhatsApp icon black */
+.call-to-action svg {
+  color: #000000 !important;
+}
 
 .bg-white { background-color: #ffffff; }
 .bg-gray-50 { background-color: #f9fafb; }
@@ -195,7 +214,7 @@ body {
 
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: white !important;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 

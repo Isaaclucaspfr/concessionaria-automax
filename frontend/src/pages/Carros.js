@@ -324,7 +324,7 @@ Aguardo retorno!`;
                   </p>
                   
                   <div className="flex items-center justify-between">
-                    <div className="text-xl font-bold text-blue-600">
+                    <div className="text-xl font-bold text-blue-600 car-price">
                       {formatPrice(carro.preco)}
                     </div>
                     <button 

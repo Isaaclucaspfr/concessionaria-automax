@@ -271,7 +271,7 @@ const Carros = () => {
                   </p>
                   
                   <div className="flex items-center justify-between">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-blue-600 car-price">
                       {formatPrice(carro.preco)}
                     </div>
                     <button 

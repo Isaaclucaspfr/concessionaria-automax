@@ -11,10 +11,77 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  color: #000000;
+  color: #000000 !important;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
   min-height: 100vh;
+}
+
+/* Força todo texto para preto por padrão */
+* {
+  color: #000000 !important;
+}
+
+/* Exceções ESPECÍFICAS para elementos que precisam de cor branca */
+.text-white,
+.admin-panel .text-white,
+button.bg-gradient-to-r *,
+.bg-blue-600 *,
+.bg-indigo-600 *,
+.bg-purple-600 *,
+.bg-gray-900 *,
+header .bg-gradient-to-r *,
+.hero h1,
+.hero p,
+.hero .text-xl,
+.hero .text-4xl,
+.hero .text-5xl,
+.call-to-action h2,
+.call-to-action p {
+  color: #ffffff !important;
+}
+
+/* Preços dos carros - azul em páginas com fundo branco, branco na homepage */
+.hero .car-price {
+  color: #ffffff !important; /* Branco na seção hero da homepage */
+}
+
+.car-price {
+  color: #2563eb !important; /* Azul nas outras páginas */
+  font-weight: bold;
+}
+
+/* Forçar texto preto nos botões da hero */
+.hero .btn,
+.hero .btn * {
+  color: #000000 !important;
+}
+
+/* Forçar cores corretas nos botões da call-to-action */
+.call-to-action .bg-white {
+  color: #1e40af !important; /* text-blue-600 */
+}
+
+.call-to-action .border-white,
+.call-to-action .border-white *,
+.call-to-action .border-white svg,
+.call-to-action .text-white,
+.call-to-action .text-white * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Forçar especificamente o ícone do WhatsApp */
+.call-to-action svg[fill="currentColor"] {
+  fill: #25D366 !important; /* Verde do WhatsApp */
+  color: #25D366 !important;
+}
+
+/* Regra ainda mais específica para o WhatsApp */
+.call-to-action a[href*="wa.me"] svg,
+.call-to-action a[href*="whatsapp"] svg {
+  fill: #25D366 !important;
+  color: #25D366 !important;
 }
 
 /* Wrapper para conteúdo */
@@ -137,6 +204,90 @@ body {
 
 /* Text colors for colored backgrounds */
 .text-white { color: #ffffff !important; }
+
+/* Admin panel specific styles */
+/* Estilos específicos para o painel admin */
+.admin-panel h1,
+.admin-panel h2,
+.admin-panel h3,
+.admin-panel p:not(.text-white):not(.text-purple-200):not(.text-gray-500),
+.admin-panel span:not(.text-white):not(.text-purple-200):not(.text-gray-500),
+.admin-panel div:not(.text-white):not(.text-purple-200):not(.text-gray-500),
+.admin-panel td,
+.admin-panel th,
+.admin-panel label {
+  color: #374151 !important;
+}
+
+/* Checkboxes específicos para admin */
+.admin-panel input[type="checkbox"] {
+  accent-color: #8b5cf6 !important;
+  transform: scale(1.2);
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Botões e inputs no admin - cor de texto escura */
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel select {
+  color: #374151 !important;
+}
+
+/* Preservar cores específicas do design */
+.admin-panel .text-white {
+  color: #ffffff !important;
+}
+
+.admin-panel .text-purple-200 {
+  color: #ddd6fe !important;
+}
+
+.admin-panel .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.admin-panel .text-purple-800 {
+  color: #6b21a8 !important;
+}
+
+.admin-panel .text-green-300 {
+  color: #86efac !important;
+}
+
+.admin-panel .text-blue-300 {
+  color: #93c5fd !important;
+}
+
+.admin-panel .text-blue-800 {
+  color: #1e40af !important;
+}
+
+/* Force white text ONLY on specific dark backgrounds */
+.bg-gradient-to-br .text-white,
+.bg-gray-900 .text-white,
+.admin-panel .text-white {
+  color: #ffffff !important;
+}
+
+/* Forçar texto visível em backgrounds claros no admin */
+.admin-panel .bg-white *,
+.admin-panel .bg-gray-50 *,
+.admin-panel .bg-purple-50 *,
+.admin-panel .bg-blue-50 * {
+  color: #374151 !important;
+}
+
+/* Exceções para elementos com cores específicas */
+.admin-panel .text-white,
+.admin-panel .text-purple-200,
+.admin-panel .text-gray-500,
+.admin-panel .text-purple-800,
+.admin-panel .text-green-300,
+.admin-panel .text-blue-300,
+.admin-panel .text-blue-800 {
+  color: inherit !important;
+}
 
 /* Specific black text for header logo and footer */
 .header-logo h1,

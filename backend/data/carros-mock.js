@@ -13,8 +13,8 @@ export const carrosMock = [
     descricao: "Sedã executivo com excelente custo-benefício, ideal para uso urbano e viagens.",
     fotos: [
       "/images/cars/corolla.png",
-      "/images/cars/corolla.png",
-      "/images/cars/corolla.png"
+      "/images/cars/corolla-side.png",
+      "/images/cars/corolla-rear.png"
     ],
     disponivel: true,
     categoria: "sedan"

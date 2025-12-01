@@ -227,5 +227,24 @@ export const carrosMock = [
     ],
     disponivel: true,
     categoria: "hatch"
+  },
+  {
+    id: 13,
+    marca: "Toyota",
+    modelo: "Corolla Yaris",
+    ano: 2024,
+    preco: 95000,
+    quilometragem: 3000,
+    combustivel: "Flex",
+    cambio: "Automático",
+    cor: "Azul",
+    descricao: "Hatch compacto e eficiente com design moderno e excelente consumo de combustível.",
+    fotos: [
+      "/images/cars/yaris.png",
+      "/images/cars/yaris.png",
+      "/images/cars/yaris.png"
+    ],
+    disponivel: true,
+    categoria: "hatch"
   }
 ];

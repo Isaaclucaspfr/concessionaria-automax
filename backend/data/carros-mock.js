@@ -246,5 +246,24 @@ export const carrosMock = [
     ],
     disponivel: true,
     categoria: "hatch"
+  },
+  {
+    id: 14,
+    marca: "Chevrolet",
+    modelo: "Cruze",
+    ano: 2024,
+    preco: 155000,
+    quilometragem: 2000,
+    combustivel: "Gasolina",
+    cambio: "Automático",
+    cor: "Preto",
+    descricao: "Sedã moderno e elegante com excelente desempenho, conforto premium e tecnologia avançada.",
+    fotos: [
+      "/images/cars/cruze.png",
+      "/images/cars/cruze.png",
+      "/images/cars/cruze.png"
+    ],
+    disponivel: true,
+    categoria: "sedan"
   }
 ];
